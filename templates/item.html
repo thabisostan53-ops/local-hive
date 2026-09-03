@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ listing.title }} - Local Hive</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">🐝 Local Hive</a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/post" class="btn-primary">📦 Sell Something</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="item-section">
+        <div class="container">
+            <div class="item-container">
+                <!-- Image -->
+                <div class="item-image">
+                    {% if listing.image_filename %}
+                        <img src="{{ url_for('static', filename='uploads/' + listing.image_filename) }}" 
+                             alt="{{ listing.title }}">
+                    {% else %}
+                        <div class="no-image-large">📸 No image</div>
+                    {% endif %}
+                </div>
+
+                <!-- Details -->
+                <div class="item-details">
+                    <h1>{{ listing.title }}</h1>
+                    <p class="price-large">R{{ "%.2f"|format(listing.price) }}</p>
+                    
+                    <div class="item-meta">
+                        <span class="badge">{{ listing.category }}</span>
+                        <span class="badge-location">📍 {{ listing.location }}</span>
+                        <span class="badge-date">📅 Posted {{ listing.created_at.strftime('%B %d, %Y') }}</span>
+                    </div>
+
+                    <div class="item-description">
+                        <h3>Description</h3>
+                        <p>{{ listing.description }}</p>
+                    </div>
+
+                    <!-- Contact Seller -->
+                    <div class="contact-section">
+                        <h3>Contact Seller</h3>
+                        <div class="contact-methods">
+                            {% if listing.phone %}
+                                <a href="tel:{{ listing.phone }}" class="contact-btn phone">
+                                    📞 Call {{ listing.phone }}
+                                </a>
+                            {% endif %}
+                            {% if listing.whatsapp %}
+                                <a href="https://wa.me/{{ listing.whatsapp|replace('+', '') }}" 
+                                   target="_blank" class="contact-btn whatsapp">
+                                    💬 WhatsApp
+                                </a>
+                            {% endif %}
+                            {% if listing.email %}
+                                <a href="mailto:{{ listing.email }}" class="contact-btn email">
+                                    ✉️ Email {{ listing.email }}
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Report Button -->
+                    <div class="report-section">
+                        <form action="/report/{{ listing.id }}" method="POST" 
+                              onsubmit="return confirm('Report this listing for spam or inappropriate content?')">
+                            <button type="submit" class="btn-report">🚩 Report</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="back-link">
+                <a href="/">← Back to all listings</a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

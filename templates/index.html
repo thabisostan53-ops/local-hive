@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Hive - Community Marketplace</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">🐝 Local Hive</a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/post" class="btn-primary">📦 Sell Something</a>
+                <a href="/about">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <h1>Your Community Marketplace</h1>
+            <p>Buy and sell locally. No accounts needed. Just list and connect.</p>
+            <a href="/post" class="btn-large">Start Selling for Free →</a>
+        </div>
+    </header>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- Filters -->
+    <section class="filters">
+        <div class="container">
+            <form method="GET" action="/" class="filter-form">
+                <input type="text" name="search" placeholder="Search listings..." value="{{ search }}">
+                
+                <select name="category">
+                    <option value="all">All Categories</option>
+                    {% for category in categories %}
+                        <option value="{{ category }}" {% if category == current_category %}selected{% endif %}>
+                            {{ category }}
+                        </option>
+                    {% endfor %}
+                </select>
+                
+                <select name="location">
+                    <option value="all">All Locations</option>
+                    {% for loc in locations %}
+                        <option value="{{ loc }}" {% if loc == location %}selected{% endif %}>
+                            {{ loc }}
+                        </option>
+                    {% endfor %}
+                </select>
+                
+                <button type="submit">🔍 Filter</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Listings Grid -->
+    <section class="listings">
+        <div class="container">
+            <div class="listings-header">
+                <h2>Available Items</h2>
+                <span>{{ listings|length }} listings found</span>
+            </div>
+            
+            <div class="listing-grid">
+                {% if listings %}
+                    {% for listing in listings %}
+                        <div class="listing-card">
+                            <a href="/item/{{ listing.id }}">
+                                {% if listing.image_filename %}
+                                    <img src="{{ url_for('static', filename='uploads/' + listing.image_filename) }}" 
+                                         alt="{{ listing.title }}" class="listing-image">
+                                {% else %}
+                                    <div class="no-image">📸 No image</div>
+                                {% endif %}
+                                <div class="listing-details">
+                                    <h3>{{ listing.title }}</h3>
+                                    <p class="price">R{{ "%.2f"|format(listing.price) }}</p>
+                                    <p class="location">📍 {{ listing.location }}</p>
+                                    <p class="category">🏷️ {{ listing.category }}</p>
+                                    <p class="time">Posted {{ listing.created_at.strftime('%b %d, %Y') }}</p>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="no-listings">No listings found. Be the first to <a href="/post">post something</a>!</p>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Local Hive. Built for communities.</p>
+            <div class="footer-links">
+                <a href="/about">About</a>
+                <a href="/privacy">Privacy</a>
+                <a href="/admin">Admin</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

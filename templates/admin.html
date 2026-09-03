@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Local Hive</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">🐝 Local Hive</a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/post" class="btn-primary">📦 Sell Something</a>
+                <a href="/admin">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="admin-section">
+        <div class="container">
+            <h1>🛠️ Admin Dashboard</h1>
+            
+            <h2>⏳ Pending Approval ({{ pending|length }})</h2>
+            {% if pending %}
+                <ul>
+                    {% for listing in pending %}
+                        <li>
+                            <strong>{{ listing.title }}</strong> - R{{ "%.2f"|format(listing.price) }} - {{ listing.location }}
+                            <a href="/admin/approve/{{ listing.id }}">[Approve]</a> | 
+                            <a href="/admin/delete/{{ listing.id }}">[Delete]</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No pending listings.</p>
+            {% endif %}
+            
+            <h2>✅ Active Listings ({{ active|length }})</h2>
+            {% if active %}
+                <ul>
+                    {% for listing in active %}
+                        <li>
+                            <strong>{{ listing.title }}</strong> R{{ "%.2f"|format(listing.price) }} - {{ listing.location }}
+                            <a href="/admin/delete/{{ listing.id }}">[Delete]</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No active listings.</p>
+            {% endif %}
+            
+            <h2>🚩 Reported Listings ({{ reported|length }})</h2>
+            {% if reported %}
+                <ul>
+                    {% for listing in reported %}
+                        <li>
+                            <strong>{{ listing.title }}</strong> - ${{ "%.2f"|format(listing.price) }} - {{ listing.location }}
+                            <a href="/admin/delete/{{ listing.id }}">[Delete]</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No reported listings.</p>
+            {% endif %}
+            
+            <a href="/">← Back to Home</a>
+        </div>
+    </section>
+</body>
+</html>

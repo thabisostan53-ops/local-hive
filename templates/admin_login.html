@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Local Hive</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">🐝 Local Hive</a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/post" class="btn-primary">📦 Sell Something</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="login-section">
+        <div class="container">
+            <div class="login-form-container">
+                <h1>🔐 Admin Login</h1>
+                
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                {% if error %}
+                    <div class="alert alert-error">{{ error }}</div>
+                {% endif %}
+                
+                <form method="POST" class="login-form">
+                    <div class="form-group">
+                        <label for="password">Admin Password</label>
+                        <input type="password" id="password" name="password" placeholder="Enter admin password" required>
+                    </div>
+                    <button type="submit" class="btn-submit">🔓 Login</button>
+                </form>
+                
+                <a href="/" class="back-link">← Back to Home</a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
