@@ -12,8 +12,10 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-key-change-in-production')
+app.config['SESSION_PERMANENT'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///local_hive.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=18)
 
 # File upload configuration
 UPLOAD_FOLDER = 'static/uploads'
@@ -246,6 +248,7 @@ def admin_login():
 def admin_logout():
     """Admin logout"""
     session.pop('admin_logged_in', None)
+    session.clear()
     flash('You have been logged out.', 'info')
     return redirect(url_for('index'))
 
