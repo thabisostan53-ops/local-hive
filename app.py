@@ -33,7 +33,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 db = SQLAlchemy(app)
 
 if os.getenv('DATABASE_URL'):
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL').replace('postgres://', 'postgresql://')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL').replace('postgres://', 'postgresql+psycopg://').replace('postgresql://', 'postgresql+psycopg://')
     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
         'poolclass': NullPool,
         'pool_pre_ping': True,

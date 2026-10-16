@@ -4,3 +4,4 @@ python-dotenv==1.0.0
 gunicorn==21.2.0
 Werkzeug==3.0.1
 psycopg2==2.9.10
+psycopg[binary]==3.2.1
