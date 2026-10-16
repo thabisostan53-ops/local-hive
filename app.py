@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from functools import wraps
 from flask import Flask, render_template, request, redirect, url_for, flash, abort, session
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.pool import NullPool
 from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
 
@@ -34,8 +35,8 @@ db = SQLAlchemy(app)
 if os.getenv('DATABASE_URL'):
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL').replace('postgres://', 'postgresql://')
     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+        'poolclass': NullPool,
         'pool_pre_ping': True,
-        'pool_recycle': 300,
     }
 
 # ============================================
